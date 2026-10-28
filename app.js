@@ -19,7 +19,15 @@
   const days = DAYS.map((day, i) => ({
     num: i + 1,
     topic: day.topic || "",
-    words: day.words.map(([fa, de, plural = "", note = ""]) => ({ fa, de, plural, note, day: i + 1 })),
+    words: day.words.map((w) => {
+      if (Array.isArray(w)) {
+        const [fa, de, plural = "", note = ""] = w;
+        return { fa, de, plural, note, day: i + 1 };
+      }
+      // A table is one slide: { fa, de, note, table: [[fa, de, note], ...] }
+      const rows = w.table.map(([fa, de, note = ""]) => ({ fa, de, note }));
+      return { fa: w.fa, de: w.de, plural: "", note: w.note || "", rows, day: i + 1 };
+    }),
   }));
 
   // ---------- settings ----------
@@ -143,7 +151,17 @@
                   <td>${wordHTML(w)}</td>
                   <td>${pluralHTML(w)}</td>
                   <td class="note">${esc(w.note)}</td>
-                </tr>`
+                </tr>` +
+                (w.rows || [])
+                  .map(
+                    (r) => `<tr class="sub">
+                      <td class="fa">${esc(r.fa)}</td>
+                      <td>${german(r.de)}</td>
+                      <td></td>
+                      <td class="note">${esc(r.note)}</td>
+                    </tr>`
+                  )
+                  .join("")
               )
               .join("")}
           </tbody></table>
@@ -220,11 +238,23 @@
   // ---------- slideshow ----------
   let deck = [];
   let index = 0;
-  let step = 0; // 0 = Persian, 1 = + German, 2 = + plural
+  let step = 0; // 0 = Persian, 1 = + German, 2 = + plural (tables: 2.. = + one row each)
   let playing = true;
   let timer = null;
 
-  const lastStep = (w) => (w.plural ? 2 : 1);
+  const lastStep = (w) => (w.rows ? w.rows.length + 1 : w.plural ? 2 : 1);
+
+  // Persian column is visible from the start; each German cell is revealed in turn.
+  function tableHTML(w) {
+    return (w.rows || [])
+      .map(
+        (r) => `<tr>
+          <td class="fa" dir="rtl" lang="fa">${esc(r.fa)}</td>
+          <td class="reveal" lang="de">${german(r.de)}${r.note ? `<small>${esc(r.note)}</small>` : ""}</td>
+        </tr>`
+      )
+      .join("");
+  }
 
   function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -269,12 +299,15 @@
     $("cardDe").classList.toggle("shown", step >= 1);
     $("cardPl").classList.toggle("shown", step >= 2);
     $("cardNote").classList.toggle("shown", step >= lastStep(w));
+    $("cardTable").querySelectorAll(".reveal").forEach((td, i) => td.classList.toggle("shown", step >= i + 2));
+    $("card").classList.toggle("is-table", !!w.rows);
     $("playBtn").textContent = playing ? "⏸" : "▶";
   }
 
   function showCard() {
     stopSpeech();
     step = 0;
+    $("cardTable").innerHTML = tableHTML(deck[index]);
     render();
     schedule();
   }
@@ -283,8 +316,9 @@
   function schedule() {
     clearTimeout(timer);
     if (!playing) return;
-    if (step < lastStep(deck[index])) {
-      const delay = step === 0 ? settings.deDelay : settings.plDelay;
+    const w = deck[index];
+    if (step < lastStep(w)) {
+      const delay = step === 0 || w.rows ? settings.deDelay : settings.plDelay;
       timer = setTimeout(reveal, delay * 1000);
     } else if (settings.autoNext) {
       timer = setTimeout(next, settings.nextDelay * 1000);
@@ -296,7 +330,8 @@
     step++;
     render();
     if (step === 1) speak(w.de);
-    if (step === 2 && w.plural !== PLURAL_ONLY) speak(w.plural);
+    else if (w.rows) speak(w.rows[step - 2].de);
+    else if (w.plural !== PLURAL_ONLY) speak(w.plural);
     schedule();
   }
 

@@ -198,6 +198,8 @@ main {
   width: 34%;
 }
 .words .note { color: var(--muted); font-size: 0.9rem; }
+.words tr.sub td { border-top: none; padding-top: 2px; padding-bottom: 2px; }
+.words tr.sub:last-child td { padding-bottom: 8px; }
 
 @media (max-width: 600px) {
   .words td { padding: 8px 10px; }
@@ -270,6 +272,26 @@ main {
   color: var(--muted);
 }
 .card-note { color: var(--muted); font-size: 1.05rem; min-height: 1.5em; }
+
+/* Table slides (e.g. a verb with all its forms): smaller title so every row fits. */
+.card.is-table { gap: 10px; }
+.card.is-table .card-fa { font-size: clamp(1.6rem, min(5vw, 5vh), 2.6rem); }
+.card.is-table .card-de { font-size: clamp(1.5rem, min(4.5vw, 4.5vh), 2.4rem); }
+.card.is-table .card-pl,
+.card.is-table .card-note:empty { display: none; }
+
+.card-table { border-collapse: collapse; font-size: clamp(1rem, min(3.6vw, 3.4vh), 1.6rem); }
+.card-table:empty { display: none; }
+.card-table td { padding: 4px 14px; border-top: 1px solid var(--border); }
+.card-table tr:first-child td { border-top: none; }
+.card-table .fa { font-family: var(--font-fa); text-align: right; }
+.card-table .reveal { text-align: left; font-weight: 600; }
+.card-table small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.6em;
+  font-weight: 400;
+}
 
 /* Fade in only. Hiding is instant, otherwise the next card's answer would fade out visibly. */
 .reveal { opacity: 0; transform: translateY(6px); }

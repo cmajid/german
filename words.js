@@ -13,6 +13,10 @@
           "nur Plural"  the noun only exists in plural (die Eltern)
           ""            not a noun, or leave it out
   note    optional hint shown under the word
+
+  A table (e.g. a verb with all its forms) can be one slide instead of many:
+    { fa: "بودن", de: "sein", table: [["من هستم", "ich bin"], ["شما هستید (جمع)", "ihr seid", "note"], ...] }
+  The Persian column shows first, then the German forms appear one row at a time.
 */
 const DAYS = [
   {
@@ -158,7 +162,7 @@ const DAYS = [
     ],
   },
   {
-    topic: "Familie · Personen",
+    topic: "Familie · Personen · Wie alt?",
     words: [
       ["پدربزرگ", "der Großvater", "die Großväter", "ugs.: der Opa"],
       ["مادربزرگ", "die Großmutter", "die Großmütter", "ugs.: die Oma"],
@@ -167,6 +171,23 @@ const DAYS = [
       ["زن - همسر", "die Frau", "die Frauen", "Ehefrau: meine Frau"],
       ["پسربچه", "der Junge", "die Jungen", "ugs.: die Jungs"],
       ["دختربچه", "das Mädchen", "die Mädchen", "immer das (wegen -chen)"],
+      {
+        fa: "بودن",
+        de: "sein",
+        table: [
+          ["من هستم", "ich bin"],
+          ["تو هستی", "du bist"],
+          ["او (مذکر) است", "er ist"],
+          ["او (مونث) است", "sie ist"],
+          ["آن (خنثی) است", "es ist"],
+          ["ما هستیم", "wir sind"],
+          ["شما هستید (جمع)", "ihr seid", "Plural von du"],
+          ["آنها هستند", "sie sind"],
+          ["شما هستید (رسمی)", "Sie sind", "höflich, immer groß"],
+        ],
+      },
+      ["او (مونث) چند ساله است؟", "Wie alt ist sie?", "", "du: Wie alt bist du?"],
+      ["او (مونث) 20 ساله است.", "Sie ist zwanzig Jahre alt.", "", "20 = zwanzig"],
     ],
   },
 ];
