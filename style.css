@@ -41,6 +41,9 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { background: var(--bg); }
 
 body {
   margin: 0;
@@ -353,8 +356,13 @@ select:hover,
   display: flex;
   flex-direction: column;
   background: var(--bg);
+  /* viewport-fit=cover lets the page reach under the notch / Dynamic Island and home bar,
+     so keep the slideshow's own content inside the safe area. */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
-.show[hidden] { display: none; }
+/* While the slideshow is open, take the page out of the layout: mobile browsers can leave
+   a strip under their toolbars that a fixed overlay doesn't cover, and the page showed there. */
+html.show-open body > :not(.show) { display: none; }
 
 .show-top {
   display: flex;

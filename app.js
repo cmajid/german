@@ -298,6 +298,7 @@
   let step = 0; // 0 = translation, 1 = + German, 2 = + plural (tables: 2.. = + one row each)
   let playing = true;
   let timer = null;
+  let pageScroll = 0; // where the word list was when the slideshow opened
 
   const lastStep = (w) => (w.rows ? w.rows.length + 1 : w.plural ? 2 : 1);
 
@@ -331,8 +332,9 @@
     if (!deck.length) return;
     index = 0;
     playing = true;
+    pageScroll = window.scrollY;
     $("show").hidden = false;
-    document.body.style.overflow = "hidden";
+    document.documentElement.classList.add("show-open");
     showCard();
   }
 
@@ -340,7 +342,8 @@
     clearTimeout(timer);
     stopSpeech();
     $("show").hidden = true;
-    document.body.style.overflow = "";
+    document.documentElement.classList.remove("show-open");
+    window.scrollTo(0, pageScroll); // the page was hidden, so put the reader back where they were
     if (document.fullscreenElement) document.exitFullscreen();
   }
 
