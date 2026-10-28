@@ -67,6 +67,7 @@
   // ---------- formatting ----------
   const ARTICLE = /^(der|die|das)\s+/i;
   const PLURAL_ONLY = "nur Plural";
+  const NO_PLURAL = "kein Plural";
 
   function esc(s) {
     return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -102,7 +103,7 @@
 
   function pluralHTML(w) {
     if (!w.plural) return "";
-    if (w.plural === PLURAL_ONLY) return `<span class="muted">${esc(w.plural)}</span>`;
+    if (w.plural === PLURAL_ONLY || w.plural === NO_PLURAL) return `<span class="muted">${esc(w.plural)}</span>`;
     return german(w.plural, true);
   }
 
@@ -387,7 +388,7 @@
     render();
     if (step === 1) speak(w.de);
     else if (w.rows) speak(w.rows[step - 2].de);
-    else if (w.plural !== PLURAL_ONLY) speak(w.plural);
+    else if (w.plural !== PLURAL_ONLY && w.plural !== NO_PLURAL) speak(w.plural);
     schedule();
   }
 

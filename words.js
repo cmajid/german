@@ -10,9 +10,9 @@
           Words without an article (verbs, adverbs, sentences) are fine too: "immer".
   plural  "die Äpfel"
           Can be the same as the singular: "die Brötchen".
-          No common plural: write what Germans say instead and add a note,
-            e.g. "die Obstsorten", "kein üblicher Plural".
-          "nur Plural"  the noun only exists in plural (die Eltern)
+          "kein Plural"  the noun has no plural (das Obst). If Germans use another word
+                         for "several kinds", put it in the note: "Sorten: die Obstsorten".
+          "nur Plural"   the noun only exists in plural (die Eltern)
           Leave it out when the word is not a noun.
   note    optional hint shown under the word
 
@@ -51,7 +51,7 @@ const DAYS = [
   {
     topic: "Obst & Gemüse",
     words: [
-      { fa: "میوه", en: "fruit", de: "das Obst", plural: "die Obstsorten", note: "kein üblicher Plural" },
+      { fa: "میوه", en: "fruit", de: "das Obst", plural: "kein Plural", note: "Sorten: die Obstsorten" },
       { fa: "سبزیجات", en: "vegetables", de: "das Gemüse", plural: "die Gemüse" },
       { fa: "موز", en: "banana", de: "die Banane", plural: "die Bananen" },
       { fa: "پرتقال", en: "orange", de: "die Orange", plural: "die Orangen", note: "auch: die Apfelsine" },
@@ -77,7 +77,7 @@ const DAYS = [
     words: [
       { fa: "شراب", en: "wine", de: "der Wein", plural: "die Weine" },
       { fa: "کولا", en: "cola", de: "die Cola", plural: "die Colas" },
-      { fa: "شیر", en: "milk", de: "die Milch", plural: "die Milchsorten", note: "kein üblicher Plural" },
+      { fa: "شیر", en: "milk", de: "die Milch", plural: "kein Plural", note: "Sorten: die Milchsorten" },
       { fa: "شیرکافه", en: "milky coffee", de: "der Milchkaffee", plural: "die Milchkaffees" },
     ],
   },
@@ -90,10 +90,10 @@ const DAYS = [
       { fa: "ماست", en: "yogurt", de: "der Joghurt", plural: "die Joghurts" },
       { fa: "محصولات لبنی", en: "dairy product", de: "das Milchprodukt", plural: "die Milchprodukte" },
       { fa: "روغن", en: "oil", de: "das Öl", plural: "die Öle" },
-      { fa: "برنج", en: "rice", de: "der Reis", plural: "die Reissorten", note: "kein üblicher Plural" },
-      { fa: "گوشت", en: "meat", de: "das Fleisch", plural: "die Fleischsorten", note: "kein üblicher Plural" },
+      { fa: "برنج", en: "rice", de: "der Reis", plural: "kein Plural", note: "Sorten: die Reissorten" },
+      { fa: "گوشت", en: "meat", de: "das Fleisch", plural: "kein Plural", note: "Sorten: die Fleischsorten" },
       { fa: "ماهی", en: "fish", de: "der Fisch", plural: "die Fische" },
-      { fa: "کره", en: "butter", de: "die Butter", plural: "die Buttersorten", note: "kein üblicher Plural" },
+      { fa: "کره", en: "butter", de: "die Butter", plural: "kein Plural", note: "Sorten: die Buttersorten" },
       { fa: "مرغ", en: "chicken", de: "das Hähnchen", plural: "die Hähnchen", note: "das Tier: das Huhn, die Hühner" },
       { fa: "نان", en: "bread", de: "das Brot", plural: "die Brote" },
       { fa: "لازانیا", en: "lasagna", de: "die Lasagne", plural: "die Lasagnen" },
@@ -136,7 +136,7 @@ const DAYS = [
       { fa: "آدرس ایمیل", en: "email address", de: "die E-Mail-Adresse", plural: "die E-Mail-Adressen" },
       { fa: "درس آلمانی", en: "German course", de: "der Deutschkurs", plural: "die Deutschkurse" },
       { fa: "موزیک", en: "music", de: "die Musik", plural: "die Musiken", note: "selten" },
-      { fa: "ورزش", en: "sport", de: "der Sport", plural: "die Sportarten", note: "kein üblicher Plural" },
+      { fa: "ورزش", en: "sport", de: "der Sport", plural: "kein Plural", note: "Arten: die Sportarten" },
       { fa: "قهوه", en: "coffee", de: "der Kaffee", plural: "die Kaffees" },
       { fa: "حرف الفبا", en: "letter (of the alphabet)", de: "der Buchstabe", plural: "die Buchstaben" },
       { fa: "هجی کردن", en: "to spell", de: "buchstabieren" },
