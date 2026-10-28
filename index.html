@@ -12,12 +12,15 @@
 <body>
   <header class="top">
     <h1>Deutsch Wörter</h1>
-    <p class="legend">
-      <span class="art art-der">der</span>
-      <span class="art art-die">die</span>
-      <span class="art art-das">das</span>
-      <span class="art art-pl">Plural</span>
-    </p>
+    <div class="top-right">
+      <p class="legend">
+        <span class="art art-der">der</span>
+        <span class="art art-die">die</span>
+        <span class="art art-das">das</span>
+        <span class="art art-pl">Plural</span>
+      </p>
+      <select class="lang-select" aria-label="Translation language" title="Translation language"></select>
+    </div>
   </header>
 
   <main>
@@ -69,13 +72,14 @@
       <span id="showDay" class="badge"></span>
       <span id="showCount" class="count"></span>
       <span class="spacer"></span>
+      <select class="lang-select" aria-label="Translation language" title="Translation language"></select>
       <button type="button" id="fsBtn" class="icon-btn" title="Fullscreen">⛶</button>
       <button type="button" id="closeBtn" class="icon-btn" title="Close (Esc)">✕</button>
     </div>
     <div class="progress"><div id="progressBar"></div></div>
 
     <div id="card" class="card">
-      <div id="cardFa" class="card-fa" dir="rtl" lang="fa"></div>
+      <div id="cardPrompt" class="card-prompt"></div>
       <div id="cardDe" class="card-de reveal" lang="de"></div>
       <div id="cardPl" class="card-pl reveal" lang="de"></div>
       <table id="cardTable" class="card-table"></table>

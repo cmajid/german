@@ -2,7 +2,20 @@
   "use strict";
 
   const STORE_KEY = "deutsch-woerter";
+
+  // Languages you learn German from. Each word in words.js has a text per code.
+  const LANGUAGES = [
+    { code: "fa", name: "فارسی", dir: "rtl" },
+    { code: "en", name: "English", dir: "ltr" },
+  ];
+  // Dropdown choices: each language on its own, plus all of them together.
+  const LANG_OPTIONS = [
+    ...LANGUAGES.map((l) => ({ value: l.code, label: l.name })),
+    { value: LANGUAGES.map((l) => l.code).join(","), label: LANGUAGES.map((l) => l.name).join(" + ") },
+  ];
+
   const DEFAULTS = {
+    lang: "fa", // a LANG_OPTIONS value
     deDelay: 1,
     plDelay: 1,
     nextDelay: 2,
@@ -20,13 +33,14 @@
     num: i + 1,
     topic: day.topic || "",
     words: day.words.map((w) => {
+      // Older format: [fa, de, plural, note]
       if (Array.isArray(w)) {
         const [fa, de, plural = "", note = ""] = w;
         return { fa, de, plural, note, day: i + 1 };
       }
-      // A table is one slide: { fa, de, note, table: [[fa, de, note], ...] }
-      const rows = w.table.map(([fa, de, note = ""]) => ({ fa, de, note }));
-      return { fa: w.fa, de: w.de, plural: "", note: w.note || "", rows, day: i + 1 };
+      // A table is one slide: { fa, en, de, table: [{ fa, en, de, note }, ...] }
+      const rows = w.table && w.table.map((r) => ({ ...r, note: r.note || "" }));
+      return { ...w, plural: w.plural || "", note: w.note || "", rows, day: i + 1 };
     }),
   }));
 
@@ -40,6 +54,7 @@
     } catch {}
     const s = { ...DEFAULTS, ...saved };
     if (!Array.isArray(s.hiddenDays)) s.hiddenDays = [];
+    if (!LANG_OPTIONS.some((o) => o.value === s.lang)) s.lang = DEFAULTS.lang;
     return s;
   }
 
@@ -66,6 +81,24 @@
   }
 
   const wordHTML = (w) => german(w.de, w.plural === PLURAL_ONLY);
+
+  const promptLangs = () => settings.lang.split(",").map((code) => LANGUAGES.find((l) => l.code === code));
+
+  // One element per chosen language, e.g. <td lang="fa" dir="rtl">سیب</td>.
+  // With a single language, a missing translation falls back to another language instead of a blank.
+  function translations(item, tag, cls = "") {
+    const langs = promptLangs();
+    return langs
+      .map((lang) => {
+        let extra = "";
+        if (!item[lang.code] && langs.length === 1) {
+          lang = LANGUAGES.find((l) => item[l.code]) || lang;
+          extra = " fallback";
+        }
+        return `<${tag} class="${cls}${extra}" lang="${lang.code}" dir="${lang.dir}">${esc(item[lang.code] || "")}</${tag}>`;
+      })
+      .join("");
+  }
 
   function pluralHTML(w) {
     if (!w.plural) return "";
@@ -147,7 +180,7 @@
             ${d.words
               .map(
                 (w) => `<tr>
-                  <td class="fa">${esc(w.fa)}</td>
+                  ${translations(w, "td", "src")}
                   <td>${wordHTML(w)}</td>
                   <td>${pluralHTML(w)}</td>
                   <td class="note">${esc(w.note)}</td>
@@ -155,7 +188,7 @@
                 (w.rows || [])
                   .map(
                     (r) => `<tr class="sub">
-                      <td class="fa">${esc(r.fa)}</td>
+                      ${translations(r, "td", "src")}
                       <td>${german(r.de)}</td>
                       <td></td>
                       <td class="note">${esc(r.note)}</td>
@@ -168,6 +201,29 @@
         </details>`
       )
       .join("");
+  }
+
+  // ---------- language picker (page header and slideshow) ----------
+  const langSelects = document.querySelectorAll(".lang-select");
+
+  langSelects.forEach((select) => {
+    select.innerHTML = LANG_OPTIONS.map((o) => `<option value="${o.value}">${esc(o.label)}</option>`).join("");
+    select.value = settings.lang;
+    select.addEventListener("change", () => {
+      select.blur(); // give the arrow keys back to the slideshow
+      setLang(select.value);
+    });
+  });
+
+  function setLang(value) {
+    settings.lang = value;
+    save();
+    langSelects.forEach((s) => (s.value = value));
+    renderList();
+    if (!$("show").hidden) {
+      $("cardTable").innerHTML = tableHTML(deck[index]);
+      render();
+    }
   }
 
   // ---------- speech ----------
@@ -238,18 +294,18 @@
   // ---------- slideshow ----------
   let deck = [];
   let index = 0;
-  let step = 0; // 0 = Persian, 1 = + German, 2 = + plural (tables: 2.. = + one row each)
+  let step = 0; // 0 = translation, 1 = + German, 2 = + plural (tables: 2.. = + one row each)
   let playing = true;
   let timer = null;
 
   const lastStep = (w) => (w.rows ? w.rows.length + 1 : w.plural ? 2 : 1);
 
-  // Persian column is visible from the start; each German cell is revealed in turn.
+  // Translation column is visible from the start; each German cell is revealed in turn.
   function tableHTML(w) {
     return (w.rows || [])
       .map(
         (r) => `<tr>
-          <td class="fa" dir="rtl" lang="fa">${esc(r.fa)}</td>
+          ${translations(r, "td", "src")}
           <td class="reveal" lang="de">${german(r.de)}${r.note ? `<small>${esc(r.note)}</small>` : ""}</td>
         </tr>`
       )
@@ -292,7 +348,7 @@
     $("showDay").textContent = `Day ${w.day}`;
     $("showCount").textContent = `${index + 1} / ${deck.length}`;
     $("progressBar").style.width = `${((index + 1) / deck.length) * 100}%`;
-    $("cardFa").textContent = w.fa;
+    $("cardPrompt").innerHTML = translations(w, "div");
     $("cardDe").innerHTML = wordHTML(w);
     $("cardPl").innerHTML = w.plural ? `<span class="label">Plural</span>${pluralHTML(w)}` : "";
     $("cardNote").textContent = w.note;
@@ -383,7 +439,7 @@
   });
 
   document.addEventListener("keydown", (e) => {
-    if ($("show").hidden) return;
+    if ($("show").hidden || e.target.tagName === "SELECT") return;
     switch (e.key) {
       case " ":
       case "Enter":
