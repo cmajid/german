@@ -361,7 +361,8 @@
     $("cardNote").classList.toggle("shown", step >= lastStep(w));
     $("cardTable").querySelectorAll(".reveal").forEach((td, i) => td.classList.toggle("shown", step >= i + 2));
     $("card").classList.toggle("is-table", !!w.rows);
-    $("playBtn").textContent = playing ? "⏸" : "▶";
+    $("playBtn").classList.toggle("paused", !playing);
+    $("playBtn").setAttribute("aria-label", playing ? "Pause" : "Play");
   }
 
   function showCard() {

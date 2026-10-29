@@ -89,9 +89,16 @@
     </div>
 
     <div class="show-controls">
-      <button type="button" id="prevBtn" class="icon-btn big" title="Previous (←)">◀</button>
-      <button type="button" id="playBtn" class="icon-btn big" title="Pause / play (P)">⏸</button>
-      <button type="button" id="nextBtn" class="icon-btn big" title="Next (→ or Space)">▶</button>
+      <button type="button" id="prevBtn" class="ctrl-btn" title="Previous (←)" aria-label="Previous">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <button type="button" id="playBtn" class="ctrl-btn play" title="Pause / play (P)" aria-label="Pause">
+        <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.9" y="5" width="3.6" height="14" rx="1.2"/></svg>
+        <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path transform="translate(-1.8 0)" d="M8.5 5.6v12.8a1.2 1.2 0 0 0 1.8 1l10-6.4a1.2 1.2 0 0 0 0-2l-10-6.4a1.2 1.2 0 0 0-1.8 1z"/></svg>
+      </button>
+      <button type="button" id="nextBtn" class="ctrl-btn" title="Next (→ or Space)" aria-label="Next">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
     </div>
     <p class="hint">Space / → reveal &amp; next · ← back · P pause · Esc close</p>
   </div>
