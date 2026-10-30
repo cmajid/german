@@ -14,6 +14,16 @@
     { value: LANGUAGES.map((l) => l.code).join(","), label: LANGUAGES.map((l) => l.name).join(" + ") },
   ];
 
+  // Personal pronouns, shown above the play / pause button as a quick reference.
+  const PRONOUNS = [
+    { de: "ich", fa: "من", en: "I" },
+    { de: "du", fa: "تو", en: "you" },
+    { de: "er · sie · es", fa: "او · آن", en: "he · she · it" },
+    { de: "wir", fa: "ما", en: "we" },
+    { de: "ihr", fa: "شما (جمع)", en: "you (pl.)" },
+    { de: "sie · Sie", fa: "آنها · شما (رسمی)", en: "they · you (formal)" },
+  ];
+
   const DEFAULTS = {
     lang: "fa", // a LANG_OPTIONS value
     deDelay: 1,
@@ -221,6 +231,7 @@
     save();
     langSelects.forEach((s) => (s.value = value));
     renderList();
+    renderPronouns();
     if (!$("show").hidden) {
       $("cardTable").innerHTML = tableHTML(deck[index]);
       render();
@@ -373,6 +384,12 @@
     schedule();
   }
 
+  function renderPronouns() {
+    $("pronouns").innerHTML = PRONOUNS.map(
+      (p) => `<div class="pronoun"><span lang="de">${esc(p.de)}</span>${translations(p, "small")}</div>`
+    ).join("");
+  }
+
   // Wait for the next reveal, or for the next word once everything is shown.
   function schedule() {
     clearTimeout(timer);
@@ -469,5 +486,6 @@
 
   renderDays();
   renderList();
+  renderPronouns();
   updateStart();
 })();

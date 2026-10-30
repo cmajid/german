@@ -473,6 +473,21 @@ html.show-open body > :not(.show) { display: none; }
   .reveal { transform: none; filter: none; }
 }
 
+/* Pronoun reference, centred so it sits right on top of the play / pause button. */
+.pronouns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 18px;
+  padding: 8px 16px 0;
+  line-height: 1.2;
+  text-align: center;
+}
+.pronoun { display: flex; flex-direction: column; align-items: center; }
+.pronoun [lang="de"] { font-family: var(--font-display); font-size: 1.25rem; }
+.pronoun small { color: var(--muted); font-size: 0.72rem; }
+@media (max-width: 600px) { .pronouns { column-gap: 12px; } }
+
 .show-controls {
   display: flex;
   justify-content: center;
