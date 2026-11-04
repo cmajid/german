@@ -269,6 +269,12 @@ const DAYS = [
       { fa: "خب، ای - بد نیست", en: "Well, so-so.", de: "Na ja, so lala." },
       { fa: "تو چطور؟", en: "And you? (informal)", de: "Und dir?" },
       { fa: "شما چطور؟", en: "And you? (formal)", de: "Und Ihnen?" },
+      { fa: "باحال", en: "cool", de: "cool", note: "ugs." },
+      { fa: "و", en: "and", de: "und" },
+      { fa: "یا", en: "or", de: "oder" },
+      { fa: "اما", en: "but", de: "aber" },
+      { fa: "اما - چرا (در جواب سؤال منفی)", en: "but · yes (to a negative question)", de: "doch", note: "Kommst du nicht? – Doch!" },
+      { fa: "تا بعد", en: "See you soon!", de: "Bis bald!" },
     ],
   },
 ];
