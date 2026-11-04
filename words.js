@@ -225,7 +225,7 @@ const DAYS = [
     ],
   },
   {
-    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik · Beruf & Arbeit",
+    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik · Beruf & Arbeit · Wie geht's?",
     words: [
       { fa: "جهان", en: "world", de: "die Welt", plural: "die Welten" },
       { fa: "فرهنگ", en: "culture", de: "die Kultur", plural: "die Kulturen" },
@@ -261,6 +261,14 @@ const DAYS = [
           { fa: "آنها کار می کنند - شما (رسمی) کار می کنید", en: "they · you (formal) work", de: "sie · Sie arbeiten" },
         ],
       },
+      { fa: "حالت چطوره؟", en: "How are you? (informal)", de: "Wie geht es dir?" },
+      { fa: "حال شما چطور است؟", en: "How are you? (formal)", de: "Wie geht es Ihnen?" },
+      { fa: "چطوری؟ - چه خبر؟", en: "How's it going?", de: "Wie geht's?", note: "ugs., kurz für: Wie geht es?" },
+      { fa: "حالم ... است (خوب - عالی ...)", en: "I'm ... (good · great ...)", de: "Es geht mir ... (gut · super ...)" },
+      { fa: "بد نیست - می گذره", en: "It's okay.", de: "Es geht." },
+      { fa: "خب، ای - بد نیست", en: "Well, so-so.", de: "Na ja, so lala." },
+      { fa: "تو چطور؟", en: "And you? (informal)", de: "Und dir?" },
+      { fa: "شما چطور؟", en: "And you? (formal)", de: "Und Ihnen?" },
     ],
   },
 ];
