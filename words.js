@@ -242,4 +242,15 @@ const DAYS = [
       { fa: "اپلیکیشن", en: "app", de: "die App", plural: "die Apps" },
     ],
   },
+  {
+    topic: "Beruf & Arbeit",
+    words: [
+      { fa: "آرایشگر (مذکر)", en: "hairdresser (male)", de: "der Friseur", plural: "die Friseure" },
+      { fa: "آرایشگر (مونث)", en: "hairdresser (female)", de: "die Friseurin", plural: "die Friseurinnen" },
+      { fa: "معمار (مذکر)", en: "architect (male)", de: "der Architekt", plural: "die Architekten" },
+      { fa: "معمار (مونث)", en: "architect (female)", de: "die Architektin", plural: "die Architektinnen" },
+      { fa: "همکار (مذکر)", en: "colleague (male)", de: "der Kollege", plural: "die Kollegen" },
+      { fa: "همکار (مونث)", en: "colleague (female)", de: "die Kollegin", plural: "die Kolleginnen" },
+    ],
+  },
 ];
