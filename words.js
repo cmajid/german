@@ -246,6 +246,21 @@ const DAYS = [
       { fa: "معمار (مونث)", en: "architect (female)", de: "die Architektin", plural: "die Architektinnen" },
       { fa: "همکار (مذکر)", en: "colleague (male)", de: "der Kollege", plural: "die Kollegen" },
       { fa: "همکار (مونث)", en: "colleague (female)", de: "die Kollegin", plural: "die Kolleginnen" },
+      { fa: "رئیس (مذکر)", en: "boss (male)", de: "der Chef", plural: "die Chefs" },
+      { fa: "رئیس (مونث)", en: "boss (female)", de: "die Chefin", plural: "die Chefinnen" },
+      { fa: "شغل", en: "job", de: "der Job", plural: "die Jobs" },
+      { fa: "کار - شغل", en: "work", de: "die Arbeit", plural: "die Arbeiten" },
+      {
+        fa: "کار کردن", en: "to work", de: "arbeiten",
+        table: [
+          { fa: "من کار می کنم", en: "I work", de: "ich arbeite" },
+          { fa: "تو کار می کنی", en: "you work (informal)", de: "du arbeitest" },
+          { fa: "او - آن کار می کند", en: "he · she · it works", de: "er · sie · es arbeitet" },
+          { fa: "ما کار می کنیم", en: "we work", de: "wir arbeiten" },
+          { fa: "شما (جمع) کار می کنید", en: "you work (plural)", de: "ihr arbeitet" },
+          { fa: "آنها کار می کنند - شما (رسمی) کار می کنید", en: "they · you (formal) work", de: "sie · Sie arbeiten" },
+        ],
+      },
     ],
   },
 ];
