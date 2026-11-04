@@ -225,7 +225,7 @@ const DAYS = [
     ],
   },
   {
-    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik · Beruf & Arbeit · Wie geht's? · Zahlen 11–19",
+    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik · Beruf & Arbeit · Wie geht's? · Zahlen 11–29",
     words: [
       { fa: "جهان", en: "world", de: "die Welt", plural: "die Welten" },
       { fa: "فرهنگ", en: "culture", de: "die Kultur", plural: "die Kulturen" },
@@ -290,6 +290,16 @@ const DAYS = [
       { fa: "هفده (۱۷)", en: "seventeen (17)", de: "siebzehn", note: "ohne en: nicht siebenzehn" },
       { fa: "هجده (۱۸)", en: "eighteen (18)", de: "achtzehn" },
       { fa: "نوزده (۱۹)", en: "nineteen (19)", de: "neunzehn" },
+      { fa: "بیست (۲۰)", en: "twenty (20)", de: "zwanzig" },
+      { fa: "بیست و یک (۲۱)", en: "twenty-one (21)", de: "einundzwanzig", note: "ein + und + zwanzig: erst die Einer, dann die Zehner" },
+      { fa: "بیست و دو (۲۲)", en: "twenty-two (22)", de: "zweiundzwanzig" },
+      { fa: "بیست و سه (۲۳)", en: "twenty-three (23)", de: "dreiundzwanzig" },
+      { fa: "بیست و چهار (۲۴)", en: "twenty-four (24)", de: "vierundzwanzig" },
+      { fa: "بیست و پنج (۲۵)", en: "twenty-five (25)", de: "fünfundzwanzig" },
+      { fa: "بیست و شش (۲۶)", en: "twenty-six (26)", de: "sechsundzwanzig" },
+      { fa: "بیست و هفت (۲۷)", en: "twenty-seven (27)", de: "siebenundzwanzig" },
+      { fa: "بیست و هشت (۲۸)", en: "twenty-eight (28)", de: "achtundzwanzig" },
+      { fa: "بیست و نه (۲۹)", en: "twenty-nine (29)", de: "neunundzwanzig" },
     ],
   },
 ];
