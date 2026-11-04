@@ -204,4 +204,22 @@ const DAYS = [
       { fa: "پونی (اسب کوچک)", en: "pony", de: "das Pony", plural: "die Ponys" },
     ],
   },
+  {
+    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik",
+    words: [
+      { fa: "جهان", en: "world", de: "die Welt", plural: "die Welten" },
+      { fa: "فرهنگ", en: "culture", de: "die Kultur", plural: "die Kulturen" },
+      { fa: "زندگی", en: "life", de: "das Leben", plural: "die Leben" },
+      { fa: "ورزش", en: "sport", de: "der Sport", plural: "die Sportarten", note: "kein üblicher Plural, selten: die Sporte" },
+      { fa: "سرگرمی - تفریح", en: "hobby", de: "das Hobby", plural: "die Hobbys" },
+      { fa: "توپ", en: "ball", de: "der Ball", plural: "die Bälle" },
+      { fa: "فوتبال", en: "football, soccer", de: "der Fußball", plural: "die Fußbälle", note: "Plural nur für den Ball, nicht für das Spiel" },
+      { fa: "دوست (مذکر)", en: "friend (male)", de: "der Freund", plural: "die Freunde" },
+      { fa: "دوست (مونث)", en: "friend (female)", de: "die Freundin", plural: "die Freundinnen" },
+      { fa: "موبایل", en: "mobile phone", de: "das Handy", plural: "die Handys" },
+      { fa: "موبایل", en: "smartphone", de: "das Smartphone", plural: "die Smartphones" },
+      { fa: "لپ‌تاپ", en: "laptop", de: "der Laptop", plural: "die Laptops", note: "auch: das Laptop" },
+      { fa: "اپلیکیشن", en: "app", de: "die App", plural: "die Apps" },
+    ],
+  },
 ];
