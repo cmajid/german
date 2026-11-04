@@ -275,6 +275,12 @@ const DAYS = [
       { fa: "اما", en: "but", de: "aber" },
       { fa: "اما - چرا (در جواب سؤال منفی)", en: "but · yes (to a negative question)", de: "doch", note: "Kommst du nicht? – Doch!" },
       { fa: "تا بعد", en: "See you soon!", de: "Bis bald!" },
+      { fa: "خداحافظ", en: "Goodbye!", de: "Auf Wiedersehen!" },
+      { fa: "کوچک", en: "small", de: "klein" },
+      { fa: "بزرگ", en: "big · tall", de: "groß" },
+      { fa: "اون کیه؟", en: "Who is that?", de: "Wer ist das?" },
+      { fa: "اونا کین؟", en: "Who are they?", de: "Wer sind sie?", note: "≠ Wer sind Sie? (شما کی هستید؟ رسمی)" },
+      { fa: "خب پس اون چیه؟", en: "Well, what is that then?", de: "Na, was ist denn das?" },
     ],
   },
 ];
