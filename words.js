@@ -225,7 +225,7 @@ const DAYS = [
     ],
   },
   {
-    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik · Beruf & Arbeit · Wie geht's?",
+    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik · Beruf & Arbeit · Wie geht's? · Zahlen 11–19",
     words: [
       { fa: "جهان", en: "world", de: "die Welt", plural: "die Welten" },
       { fa: "فرهنگ", en: "culture", de: "die Kultur", plural: "die Kulturen" },
@@ -281,6 +281,15 @@ const DAYS = [
       { fa: "اون کیه؟", en: "Who is that?", de: "Wer ist das?" },
       { fa: "اونا کین؟", en: "Who are they?", de: "Wer sind sie?", note: "≠ Wer sind Sie? (شما کی هستید؟ رسمی)" },
       { fa: "خب پس اون چیه؟", en: "Well, what is that then?", de: "Na, was ist denn das?" },
+      { fa: "یازده (۱۱)", en: "eleven (11)", de: "elf" },
+      { fa: "دوازده (۱۲)", en: "twelve (12)", de: "zwölf" },
+      { fa: "سیزده (۱۳)", en: "thirteen (13)", de: "dreizehn" },
+      { fa: "چهارده (۱۴)", en: "fourteen (14)", de: "vierzehn" },
+      { fa: "پانزده (۱۵)", en: "fifteen (15)", de: "fünfzehn" },
+      { fa: "شانزده (۱۶)", en: "sixteen (16)", de: "sechzehn", note: "ohne s: nicht sechszehn" },
+      { fa: "هفده (۱۷)", en: "seventeen (17)", de: "siebzehn", note: "ohne en: nicht siebenzehn" },
+      { fa: "هجده (۱۸)", en: "eighteen (18)", de: "achtzehn" },
+      { fa: "نوزده (۱۹)", en: "nineteen (19)", de: "neunzehn" },
     ],
   },
 ];
