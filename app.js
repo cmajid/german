@@ -26,9 +26,7 @@
 
   const DEFAULTS = {
     lang: "fa", // a LANG_OPTIONS value
-    deDelay: 1,
-    plDelay: 1,
-    nextDelay: 2,
+    delay: 3, // seconds before each reveal and before the next word
     autoNext: true,
     shuffle: true,
     speak: false,
@@ -137,6 +135,7 @@
     settings.hiddenDays = settings.hiddenDays.filter((d) => d !== n);
     if (!e.target.checked) settings.hiddenDays.push(n);
     save();
+    renderList();
     updateStart();
   });
 
@@ -148,6 +147,7 @@
         .filter((n) => mode === "none" || (mode === "last" && n !== days.length));
       save();
       renderDays();
+      renderList();
       updateStart();
     })
   );
@@ -162,15 +162,17 @@
   }
 
   // ---------- settings form ----------
-  ["deDelay", "plDelay", "nextDelay"].forEach((key) => {
-    const input = $(key);
-    input.value = settings[key];
-    input.addEventListener("change", () => {
-      const v = parseFloat(input.value);
-      settings[key] = Number.isFinite(v) && v >= 0 ? v : DEFAULTS[key];
-      input.value = settings[key];
-      save();
-    });
+  function setDelay(seconds) {
+    const { min, max } = $("delay");
+    settings.delay = Math.min(max, Math.max(min, Math.round(seconds * 10) / 10));
+    $("delay").value = settings.delay;
+    save();
+  }
+
+  $("delay").value = settings.delay;
+  $("delay").addEventListener("change", (e) => {
+    const v = parseFloat(e.target.value);
+    setDelay(Number.isFinite(v) ? v : DEFAULTS.delay);
   });
 
   ["autoNext", "shuffle", "speak"].forEach((key) => {
@@ -184,7 +186,12 @@
 
   // ---------- word list ----------
   function renderList() {
-    $("wordList").innerHTML = days
+    const shown = days.filter((d) => !settings.hiddenDays.includes(d.num));
+    if (!shown.length) {
+      $("wordList").innerHTML = `<p class="list-empty">No day selected.</p>`;
+      return;
+    }
+    $("wordList").innerHTML = shown
       .map(
         (d) => `
         <details class="day" open>
@@ -399,11 +406,33 @@
     if (!playing) return;
     const w = deck[index];
     if (step < lastStep(w)) {
-      const delay = step === 0 || w.rows ? settings.deDelay : settings.plDelay;
-      timer = setTimeout(reveal, delay * 1000);
+      timer = setTimeout(reveal, settings.delay * 1000);
     } else if (settings.autoNext) {
-      timer = setTimeout(next, settings.nextDelay * 1000);
+      timer = setTimeout(next, settings.delay * 1000);
     }
+  }
+
+  // Keyboard shortcuts have no button to show their effect, so they say it briefly.
+  let toastTimer = null;
+  function toast(text) {
+    $("toast").textContent = text;
+    $("toast").hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => ($("toast").hidden = true), 1200);
+  }
+
+  function changeDelay(by) {
+    setDelay(settings.delay + by);
+    schedule();
+    toast(`${by < 0 ? "Faster" : "Slower"} · ${settings.delay} s`);
+  }
+
+  function toggleMute() {
+    if (!canSpeak) return toast("Sound isn't available here");
+    settings.speak = $("speak").checked = !settings.speak;
+    save();
+    if (!settings.speak) stopSpeech();
+    toast(settings.speak ? "Sound on" : "Muted");
   }
 
   function reveal() {
@@ -477,6 +506,16 @@
       case "p":
       case "P":
         togglePlay();
+        break;
+      case "m":
+      case "M":
+        toggleMute();
+        break;
+      case "ArrowUp":
+        changeDelay(-0.5);
+        break;
+      case "ArrowDown":
+        changeDelay(0.5);
         break;
       case "Escape":
         close();

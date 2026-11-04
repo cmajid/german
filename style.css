@@ -241,34 +241,15 @@ select:hover,
   font-variant-numeric: tabular-nums;
 }
 
-/* checkboxes drawn as small switches */
 .settings input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
   flex: none;
-  position: relative;
-  width: 36px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   margin: 0;
-  border-radius: 999px;
-  background: var(--border);
+  accent-color: var(--ink);
   cursor: pointer;
-  transition: background 0.2s var(--ease);
 }
-.settings input[type="checkbox"]::before {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--surface);
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
-  transition: transform 0.2s var(--ease);
-}
-.settings input[type="checkbox"]:checked { background: var(--ink); }
-.settings input[type="checkbox"]:checked::before { transform: translateX(14px); background: var(--ink-text); }
+.settings label.check { cursor: pointer; }
 
 .voice {
   grid-column: 1 / -1;
@@ -281,6 +262,7 @@ select:hover,
 .voice-hint { flex-basis: 100%; margin: 0; color: var(--muted); font-size: 0.88rem; }
 
 /* ---------- word list ---------- */
+.list-empty { color: var(--muted); }
 .list-title {
   margin-bottom: 8px;
   font-family: var(--font-display);
@@ -571,3 +553,18 @@ html.show-open body > :not(.show) { display: none; }
   letter-spacing: 0.02em;
 }
 @media (hover: none) { .hint { display: none; } }
+
+.toast {
+  position: absolute;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--ink-text);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+}

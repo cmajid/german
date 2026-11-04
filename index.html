@@ -41,9 +41,7 @@
     <section class="panel">
       <h2>Settings</h2>
       <div class="settings">
-        <label class="num">German after <input type="number" id="deDelay" min="0" max="30" step="0.5"> s</label>
-        <label class="num">Plural after <input type="number" id="plDelay" min="0" max="30" step="0.5"> s</label>
-        <label class="num">Next word after <input type="number" id="nextDelay" min="0" max="60" step="0.5"> s</label>
+        <label class="num">Time per step <input type="number" id="delay" min="0.5" max="30" step="0.5"> s</label>
         <label class="check"><input type="checkbox" id="autoNext"> Auto-advance</label>
         <label class="check"><input type="checkbox" id="shuffle"> Shuffle</label>
         <label class="check"><input type="checkbox" id="speak"> Read German aloud</label>
@@ -101,7 +99,8 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
       </button>
     </div>
-    <p class="hint">Space / → reveal &amp; next · ← back · P pause · Esc close</p>
+    <p class="hint">Space / → reveal &amp; next · ← back · ↑ faster · ↓ slower · M mute · P pause · Esc close</p>
+    <div id="toast" class="toast" role="status" hidden></div>
   </div>
 
   <script src="words.js"></script>
