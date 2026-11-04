@@ -225,7 +225,7 @@ const DAYS = [
     ],
   },
   {
-    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik · Beruf & Arbeit · Wie geht's? · Zahlen 11–89",
+    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik · Beruf & Arbeit · Wie geht's? · Zahlen 11–100",
     words: [
       { fa: "جهان", en: "world", de: "die Welt", plural: "die Welten" },
       { fa: "فرهنگ", en: "culture", de: "die Kultur", plural: "die Kulturen" },
@@ -318,6 +318,10 @@ const DAYS = [
       { fa: "هشتاد (۸۰)", en: "eighty (80)", de: "achtzig" },
       { fa: "هشتاد و یک (۸۱)", en: "eighty-one (81)", de: "einundachtzig" },
       { fa: "هشتاد و دو (۸۲)", en: "eighty-two (82)", de: "zweiundachtzig" },
+      { fa: "نود (۹۰)", en: "ninety (90)", de: "neunzig" },
+      { fa: "نود و سه (۹۳)", en: "ninety-three (93)", de: "dreiundneunzig" },
+      { fa: "نود و نه (۹۹)", en: "ninety-nine (99)", de: "neunundneunzig" },
+      { fa: "صد (۱۰۰)", en: "one hundred (100)", de: "einhundert", note: "auch: hundert" },
     ],
   },
 ];
