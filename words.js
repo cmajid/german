@@ -225,7 +225,7 @@ const DAYS = [
     ],
   },
   {
-    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik · Beruf & Arbeit · Wie geht's? · Zahlen 11–59",
+    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik · Beruf & Arbeit · Wie geht's? · Zahlen 11–89",
     words: [
       { fa: "جهان", en: "world", de: "die Welt", plural: "die Welten" },
       { fa: "فرهنگ", en: "culture", de: "die Kultur", plural: "die Kulturen" },
@@ -309,6 +309,15 @@ const DAYS = [
       { fa: "پنجاه (۵۰)", en: "fifty (50)", de: "fünfzig" },
       { fa: "پنجاه و سه (۵۳)", en: "fifty-three (53)", de: "dreiundfünfzig" },
       { fa: "پنجاه و شش (۵۶)", en: "fifty-six (56)", de: "sechsundfünfzig" },
+      { fa: "شصت (۶۰)", en: "sixty (60)", de: "sechzig", note: "ohne s: nicht sechszig" },
+      { fa: "شصت و شش (۶۶)", en: "sixty-six (66)", de: "sechsundsechzig" },
+      { fa: "شصت و هفت (۶۷)", en: "sixty-seven (67)", de: "siebenundsechzig" },
+      { fa: "هفتاد (۷۰)", en: "seventy (70)", de: "siebzig", note: "ohne en: nicht siebenzig" },
+      { fa: "هفتاد و سه (۷۳)", en: "seventy-three (73)", de: "dreiundsiebzig" },
+      { fa: "هفتاد و هفت (۷۷)", en: "seventy-seven (77)", de: "siebenundsiebzig" },
+      { fa: "هشتاد (۸۰)", en: "eighty (80)", de: "achtzig" },
+      { fa: "هشتاد و یک (۸۱)", en: "eighty-one (81)", de: "einundachtzig" },
+      { fa: "هشتاد و دو (۸۲)", en: "eighty-two (82)", de: "zweiundachtzig" },
     ],
   },
 ];
