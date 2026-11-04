@@ -14,6 +14,16 @@
     { value: LANGUAGES.map((l) => l.code).join(","), label: LANGUAGES.map((l) => l.name).join(" + ") },
   ];
 
+  // Personal pronouns, shown above the play / pause button as a quick reference.
+  const PRONOUNS = [
+    { de: "ich", fa: "من", en: "I" },
+    { de: "du", fa: "تو", en: "you" },
+    { de: "er · sie · es", fa: "او · آن", en: "he · she · it" },
+    { de: "wir", fa: "ما", en: "we" },
+    { de: "ihr", fa: "شما (جمع)", en: "you (pl.)" },
+    { de: "sie · Sie", fa: "آنها · شما (رسمی)", en: "they · you (formal)" },
+  ];
+
   const DEFAULTS = {
     lang: "fa", // a LANG_OPTIONS value
     deDelay: 1,
@@ -67,6 +77,7 @@
   // ---------- formatting ----------
   const ARTICLE = /^(der|die|das)\s+/i;
   const PLURAL_ONLY = "nur Plural";
+  const NO_PLURAL = "kein Plural";
 
   function esc(s) {
     return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -102,7 +113,7 @@
 
   function pluralHTML(w) {
     if (!w.plural) return "";
-    if (w.plural === PLURAL_ONLY) return `<span class="muted">${esc(w.plural)}</span>`;
+    if (w.plural === PLURAL_ONLY || w.plural === NO_PLURAL) return `<span class="muted">${esc(w.plural)}</span>`;
     return german(w.plural, true);
   }
 
@@ -220,6 +231,7 @@
     save();
     langSelects.forEach((s) => (s.value = value));
     renderList();
+    renderPronouns();
     if (!$("show").hidden) {
       $("cardTable").innerHTML = tableHTML(deck[index]);
       render();
@@ -297,6 +309,7 @@
   let step = 0; // 0 = translation, 1 = + German, 2 = + plural (tables: 2.. = + one row each)
   let playing = true;
   let timer = null;
+  let pageScroll = 0; // where the word list was when the slideshow opened
 
   const lastStep = (w) => (w.rows ? w.rows.length + 1 : w.plural ? 2 : 1);
 
@@ -330,8 +343,9 @@
     if (!deck.length) return;
     index = 0;
     playing = true;
+    pageScroll = window.scrollY;
     $("show").hidden = false;
-    document.body.style.overflow = "hidden";
+    document.documentElement.classList.add("show-open");
     showCard();
   }
 
@@ -339,7 +353,8 @@
     clearTimeout(timer);
     stopSpeech();
     $("show").hidden = true;
-    document.body.style.overflow = "";
+    document.documentElement.classList.remove("show-open");
+    window.scrollTo(0, pageScroll); // the page was hidden, so put the reader back where they were
     if (document.fullscreenElement) document.exitFullscreen();
   }
 
@@ -357,7 +372,8 @@
     $("cardNote").classList.toggle("shown", step >= lastStep(w));
     $("cardTable").querySelectorAll(".reveal").forEach((td, i) => td.classList.toggle("shown", step >= i + 2));
     $("card").classList.toggle("is-table", !!w.rows);
-    $("playBtn").textContent = playing ? "⏸" : "▶";
+    $("playBtn").classList.toggle("paused", !playing);
+    $("playBtn").setAttribute("aria-label", playing ? "Pause" : "Play");
   }
 
   function showCard() {
@@ -366,6 +382,12 @@
     $("cardTable").innerHTML = tableHTML(deck[index]);
     render();
     schedule();
+  }
+
+  function renderPronouns() {
+    $("pronouns").innerHTML = PRONOUNS.map(
+      (p) => `<div class="pronoun"><span lang="de">${esc(p.de)}</span>${translations(p, "small")}</div>`
+    ).join("");
   }
 
   // Wait for the next reveal, or for the next word once everything is shown.
@@ -387,7 +409,7 @@
     render();
     if (step === 1) speak(w.de);
     else if (w.rows) speak(w.rows[step - 2].de);
-    else if (w.plural !== PLURAL_ONLY) speak(w.plural);
+    else if (w.plural !== PLURAL_ONLY && w.plural !== NO_PLURAL) speak(w.plural);
     schedule();
   }
 
@@ -464,5 +486,6 @@
 
   renderDays();
   renderList();
+  renderPronouns();
   updateStart();
 })();

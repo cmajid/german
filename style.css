@@ -41,6 +41,9 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { background: var(--bg); }
 
 body {
   margin: 0;
@@ -353,8 +356,13 @@ select:hover,
   display: flex;
   flex-direction: column;
   background: var(--bg);
+  /* viewport-fit=cover lets the page reach under the notch / Dynamic Island and home bar,
+     so keep the slideshow's own content inside the safe area. */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
-.show[hidden] { display: none; }
+/* While the slideshow is open, take the page out of the layout: mobile browsers can leave
+   a strip under their toolbars that a fixed overlay doesn't cover, and the page showed there. */
+html.show-open body > :not(.show) { display: none; }
 
 .show-top {
   display: flex;
@@ -465,12 +473,76 @@ select:hover,
   .reveal { transform: none; filter: none; }
 }
 
+/* Pronoun reference, centred so it sits right on top of the play / pause button. */
+.pronouns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 18px;
+  padding: 8px 16px 0;
+  line-height: 1.2;
+  text-align: center;
+}
+.pronoun { display: flex; flex-direction: column; align-items: center; }
+.pronoun [lang="de"] { font-family: var(--font-display); font-size: 1.25rem; }
+.pronoun small { color: var(--muted); font-size: 0.72rem; }
+@media (max-width: 600px) { .pronouns { column-gap: 12px; } }
+
 .show-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 14px;
-  padding: 8px 16px;
+  gap: 28px;
+  padding: 12px 16px 20px;
+}
+
+/* Prev / play / next: drawn icons rather than text glyphs, which iOS renders off-centre or as emoji. */
+.ctrl-btn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, border-color 0.15s, transform 0.18s var(--ease);
+}
+.ctrl-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ctrl-btn:hover { background: var(--sunken); }
+.ctrl-btn:active { transform: scale(0.92); }
+.ctrl-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+.ctrl-btn.play {
+  width: 76px;
+  height: 76px;
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--ink-text);
+  box-shadow: 0 6px 18px -6px rgb(0 0 0 / 0.35);
+}
+.ctrl-btn.play:hover { background: var(--ink); opacity: 0.9; }
+.ctrl-btn.play svg { width: 28px; height: 28px; fill: currentColor; stroke: none; }
+.ctrl-btn.play .i-play,
+.ctrl-btn.play.paused .i-pause { display: none; }
+.ctrl-btn.play.paused .i-play { display: block; }
+
+@media (max-width: 380px) {
+  .show-controls { gap: 20px; }
+  .ctrl-btn { width: 54px; height: 54px; }
+  .ctrl-btn.play { width: 68px; height: 68px; }
 }
 .icon-btn {
   font: inherit;
@@ -489,8 +561,6 @@ select:hover,
 }
 .icon-btn:hover { background: var(--sunken); }
 .icon-btn:active { transform: scale(0.94); }
-.icon-btn.big { width: 56px; height: 56px; font-size: 1.05rem; }
-#playBtn { width: 68px; height: 68px; background: var(--ink); border-color: var(--ink); color: var(--ink-text); }
 
 .hint {
   margin: 0;
