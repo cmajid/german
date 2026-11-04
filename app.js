@@ -14,7 +14,7 @@
     { value: LANGUAGES.map((l) => l.code).join(","), label: LANGUAGES.map((l) => l.name).join(" + ") },
   ];
 
-  // Personal pronouns, shown above the play / pause button as a quick reference.
+  // Personal pronouns, shown above the play / pause button on slides that use one.
   const PRONOUNS = [
     { de: "ich", fa: "من", en: "I" },
     { de: "du", fa: "تو", en: "you" },
@@ -78,6 +78,8 @@
   const ARTICLE = /^(der|die|das)\s+/i;
   const PLURAL_ONLY = "nur Plural";
   const NO_PLURAL = "kein Plural";
+  // Whole words only: matches "Wie alt ist sie?", not "die Welt" or "süßes".
+  const USES_PRONOUN = /(?<!\p{L})(ich|du|er|sie|es|wir|ihr)(?!\p{L})/iu;
 
   function esc(s) {
     return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -372,6 +374,7 @@
     $("cardNote").classList.toggle("shown", step >= lastStep(w));
     $("cardTable").querySelectorAll(".reveal").forEach((td, i) => td.classList.toggle("shown", step >= i + 2));
     $("card").classList.toggle("is-table", !!w.rows);
+    $("pronouns").hidden = !USES_PRONOUN.test(w.de);
     $("playBtn").classList.toggle("paused", !playing);
     $("playBtn").setAttribute("aria-label", playing ? "Pause" : "Play");
   }
