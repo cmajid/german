@@ -225,7 +225,7 @@ const DAYS = [
     ],
   },
   {
-    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik",
+    topic: "Welt & Kultur · Sport & Hobbys · Freunde & Technik · Beruf & Arbeit",
     words: [
       { fa: "جهان", en: "world", de: "die Welt", plural: "die Welten" },
       { fa: "فرهنگ", en: "culture", de: "die Kultur", plural: "die Kulturen" },
@@ -240,11 +240,6 @@ const DAYS = [
       { fa: "موبایل", en: "smartphone", de: "das Smartphone", plural: "die Smartphones" },
       { fa: "لپ‌تاپ", en: "laptop", de: "der Laptop", plural: "die Laptops", note: "auch: das Laptop" },
       { fa: "اپلیکیشن", en: "app", de: "die App", plural: "die Apps" },
-    ],
-  },
-  {
-    topic: "Beruf & Arbeit",
-    words: [
       { fa: "آرایشگر (مذکر)", en: "hairdresser (male)", de: "der Friseur", plural: "die Friseure" },
       { fa: "آرایشگر (مونث)", en: "hairdresser (female)", de: "die Friseurin", plural: "die Friseurinnen" },
       { fa: "معمار (مذکر)", en: "architect (male)", de: "der Architekt", plural: "die Architekten" },
