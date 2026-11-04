@@ -74,17 +74,31 @@ A new day goes at the end of `DAYS`. Topics are in German, with parts joined by 
   No plural: `plural: "kein Plural"`. If Germans use another word for several kinds, put it in the note, e.g. `de: "das Obst", plural: "kein Plural", note: "Sorten: die Obstsorten"`. Plural-only nouns: `de: "die Eltern", plural: "nur Plural"`.
 - **note**: optional, short and in German, only when useful. Existing patterns: `auch: ...`, `ugs.: ...`, `selten`, `≠ das Studium (an der Uni)`.
 
-When a slide shows a whole conjugation, make it one table entry. The app shows it as one slide:
+## Verbs
+
+Every verb gets its conjugation as one table entry, even when the slide shows only the infinitive. The app shows it as one slide. Write the present tense (Präsens) in these six rows:
 
 ```js
 {
-  fa: "بودن", en: "to be", de: "sein",
+  fa: "تحصیل کردن", en: "to study (at university)", de: "studieren",
   table: [
-    { fa: "من هستم", en: "I am", de: "ich bin" },
-    { fa: "شما هستید (جمع)", en: "you are (plural)", de: "ihr seid", note: "Plural von du" },
+    { fa: "من تحصیل می کنم", en: "I study", de: "ich studiere" },
+    { fa: "تو تحصیل می کنی", en: "you study (informal)", de: "du studierst" },
+    { fa: "او - آن تحصیل می کند", en: "he · she · it studies", de: "er · sie · es studiert" },
+    { fa: "ما تحصیل می کنیم", en: "we study", de: "wir studieren" },
+    { fa: "شما (جمع) تحصیل می کنید", en: "you study (plural)", de: "ihr studiert" },
+    { fa: "آنها تحصیل می کنند - شما (رسمی) تحصیل می کنید", en: "they · you (formal) study", de: "sie · Sie studieren" },
   ],
 },
 ```
+
+- **Irregular forms**: get them right rather than following the pattern: `du fährst`, `er liest`, `ich weiß`, `du isst`.
+- **Separable verbs**: `ich stehe auf`. **Reflexive verbs**: `de: "sich freuen"`, `ich freue mich`.
+- **A conjugation on the slide**: use the slide's forms and rows, like `sein`, which has a row for each pronoun. Still check them.
+- **Only for a verb on its own**: a whole sentence like `Wo wohnen Sie?` stays a plain entry.
+- **Telling the user**: when the forms didn't come from the slide, name the verbs you conjugated in your reply, so they can compare with the lesson.
+
+`check.js` lists words under "Verbs without a table?" when they look like an infinitive. It's only a hint: it also catches words like `morgen`, so ignore it for those.
 
 ## Slides have mistakes
 

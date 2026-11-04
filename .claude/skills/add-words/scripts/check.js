@@ -76,6 +76,11 @@ for (const w of day.words) {
 }
 if (repeats.length) console.log(`Also in other days:\n${repeats.join("\n")}`);
 
+// Only a hint, because words like "morgen" look like an infinitive too.
+const INFINITIVE = /^(sich )?[a-zäöüß]+(en|eln|ern)$/;
+const verbs = day.words.filter((w) => INFINITIVE.test(w.de || "") && !w.table).map((w) => w.de);
+if (verbs.length) console.log(`Verbs without a table? ${verbs.join(", ")}`);
+
 if (problems.length) {
   console.log(`Problems:\n${problems.map((p) => `  ${p}`).join("\n")}`);
   process.exit(1);

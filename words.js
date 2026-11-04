@@ -16,7 +16,7 @@
           Leave it out when the word is not a noun.
   note    optional hint shown under the word
 
-  A table (e.g. a verb with all its forms) can be one slide instead of many:
+  Verbs get a table with all their present-tense forms, shown as one slide:
     { fa: "بودن", en: "to be", de: "sein", table: [
         { fa: "من هستم", en: "I am", de: "ich bin" },
         { fa: "شما هستید (جمع)", en: "you are (plural)", de: "ihr seid", note: "Plural von du" },
@@ -139,9 +139,29 @@ const DAYS = [
       { fa: "ورزش", en: "sport", de: "der Sport", plural: "kein Plural", note: "Arten: die Sportarten" },
       { fa: "قهوه", en: "coffee", de: "der Kaffee", plural: "die Kaffees" },
       { fa: "حرف الفبا", en: "letter (of the alphabet)", de: "der Buchstabe", plural: "die Buchstaben" },
-      { fa: "هجی کردن", en: "to spell", de: "buchstabieren" },
+      {
+        fa: "هجی کردن", en: "to spell", de: "buchstabieren",
+        table: [
+          { fa: "من هجی می کنم", en: "I spell", de: "ich buchstabiere" },
+          { fa: "تو هجی می کنی", en: "you spell (informal)", de: "du buchstabierst" },
+          { fa: "او - آن هجی می کند", en: "he · she · it spells", de: "er · sie · es buchstabiert" },
+          { fa: "ما هجی می کنیم", en: "we spell", de: "wir buchstabieren" },
+          { fa: "شما (جمع) هجی می کنید", en: "you spell (plural)", de: "ihr buchstabiert" },
+          { fa: "آنها هجی می کنند - شما (رسمی) هجی می کنید", en: "they · you (formal) spell", de: "sie · Sie buchstabieren" },
+        ],
+      },
       { fa: "رشته پزشکی", en: "medicine (field of study)", de: "die Medizin", plural: "die Medizinen", note: "Plural nur im Sinn von Arznei" },
-      { fa: "تحصیل کردن", en: "to study (at university)", de: "studieren" },
+      {
+        fa: "تحصیل کردن", en: "to study (at university)", de: "studieren",
+        table: [
+          { fa: "من تحصیل می کنم", en: "I study", de: "ich studiere" },
+          { fa: "تو تحصیل می کنی", en: "you study (informal)", de: "du studierst" },
+          { fa: "او - آن تحصیل می کند", en: "he · she · it studies", de: "er · sie · es studiert" },
+          { fa: "ما تحصیل می کنیم", en: "we study", de: "wir studieren" },
+          { fa: "شما (جمع) تحصیل می کنید", en: "you study (plural)", de: "ihr studiert" },
+          { fa: "آنها تحصیل می کنند - شما (رسمی) تحصیل می کنید", en: "they · you (formal) study", de: "sie · Sie studieren" },
+        ],
+      },
       { fa: "آنجا", en: "there", de: "dort", note: "auch: da" },
       { fa: "یونان", en: "Greece", de: "Griechenland" },
       { fa: "یونانی", en: "Greek (language)", de: "Griechisch", note: "die Sprache" },
