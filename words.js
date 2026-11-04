@@ -210,7 +210,7 @@ const DAYS = [
       { fa: "جهان", en: "world", de: "die Welt", plural: "die Welten" },
       { fa: "فرهنگ", en: "culture", de: "die Kultur", plural: "die Kulturen" },
       { fa: "زندگی", en: "life", de: "das Leben", plural: "die Leben" },
-      { fa: "ورزش", en: "sport", de: "der Sport", plural: "die Sportarten", note: "kein üblicher Plural, selten: die Sporte" },
+      { fa: "ورزش", en: "sport", de: "der Sport", plural: "kein Plural", note: "Arten: die Sportarten" },
       { fa: "سرگرمی - تفریح", en: "hobby", de: "das Hobby", plural: "die Hobbys" },
       { fa: "توپ", en: "ball", de: "der Ball", plural: "die Bälle" },
       { fa: "فوتبال", en: "football, soccer", de: "der Fußball", plural: "die Fußbälle", note: "Plural nur für den Ball, nicht für das Spiel" },
