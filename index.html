@@ -26,7 +26,14 @@
   </header>
 
   <main>
-    <section class="panel">
+    <!-- Pages. To add one (e.g. grammar): add a link here with href="#name",
+         and give its sections data-page="name". A section shared by several pages lists them all. -->
+    <nav class="pages" aria-label="Pages">
+      <a href="#words">Words</a>
+      <a href="#articles">Articles</a>
+    </nav>
+
+    <section class="panel" data-page="words articles">
       <div class="panel-head">
         <h2>Days</h2>
         <div class="btn-row">
@@ -38,7 +45,7 @@
       <div id="dayChips" class="chips"></div>
     </section>
 
-    <section class="panel">
+    <section class="panel" data-page="words">
       <h2>Settings</h2>
       <div class="settings">
         <label class="num">Time per step <input type="number" id="delay" min="0.5" max="30" step="0.5"> s</label>
@@ -60,11 +67,21 @@
       </div>
     </section>
 
-    <button type="button" id="startBtn" class="btn primary start">Start slideshow</button>
+    <button type="button" id="startBtn" class="btn primary start" data-page="words">Start slideshow</button>
 
-    <section>
+    <section data-page="words">
       <h2 class="list-title">Word list</h2>
       <div id="wordList"></div>
+    </section>
+
+    <section data-page="articles" class="rules-page">
+      <h2 class="list-title">Article rules</h2>
+      <p class="rules-intro">Endings that usually go with one article. Under each rule are your words from the selected days that follow it, and the ones that break it.</p>
+      <div id="ruleColumns" class="rule-columns"></div>
+
+      <h3 class="rules-sub">By meaning</h3>
+      <p class="rules-intro">These depend on what a word means, so they aren't checked against your words.</p>
+      <div id="ruleTips" class="rule-columns"></div>
     </section>
   </main>
 

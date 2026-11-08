@@ -33,6 +33,7 @@
     showRules: true, // article rules from articles.js next to nouns
     voice: "", // voiceURI of the chosen German voice; empty = best available
     hiddenDays: [], // days the user unticked, so newly added days start ticked
+    page: "words", // last page opened, used when the address has no #page
   };
 
   const $ = (id) => document.getElementById(id);
@@ -89,9 +90,12 @@
   const RULES = [...ARTICLE_RULES].sort((a, b) => b.ending.length - a.ending.length);
   const NOUN = /^(der|die|das)\s+([\p{L}-]+)$/iu;
 
-  // "die Zeitung" -> { rule: …ung → die, fits: true }. null when rules are off or none applies.
-  function ruleFor(w) {
-    if (!settings.showRules || w.plural === PLURAL_ONLY) return null;
+  // Labels next to words follow the "Show article rules" setting; the Articles page always matches.
+  const ruleFor = (w) => (settings.showRules ? matchRule(w) : null);
+
+  // "die Zeitung" -> { rule: …ung → die, fits: true }, or null when no rule applies.
+  function matchRule(w) {
+    if (w.plural === PLURAL_ONLY) return null;
     const m = w.de.match(NOUN);
     if (!m) return null;
     const noun = m[2].toLowerCase();
@@ -167,6 +171,7 @@
     if (!e.target.checked) settings.hiddenDays.push(n);
     save();
     renderList();
+    renderRules();
     updateStart();
   });
 
@@ -179,6 +184,7 @@
       save();
       renderDays();
       renderList();
+      renderRules();
       updateStart();
     })
   );
@@ -254,6 +260,74 @@
       )
       .join("");
   }
+
+  // ---------- articles page ----------
+  const ARTICLES = ["der", "die", "das"];
+
+  const columnsHTML = (render) =>
+    ARTICLES.map(
+      (art) => `<div class="rule-col"><h3 class="art art-${art}">${art}</h3>${render(art)}</div>`
+    ).join("");
+
+  // Each ending rule with the nouns from the selected days that follow it or break it.
+  function renderRules() {
+    const seen = new Set(); // a noun listed on two days is shown once
+    const matches = selectedWords().flatMap((w) => {
+      const match = !seen.has(w.de) && matchRule(w);
+      seen.add(w.de);
+      return match ? [{ w, ...match }] : [];
+    });
+    const wordsHTML = (list) => list.map((m) => german(m.w.de, false, m)).join(", ");
+
+    $("ruleColumns").innerHTML = columnsHTML((art) =>
+      ARTICLE_RULES.filter((r) => r.article === art)
+        .map((rule) => {
+          const mine = matches.filter((m) => m.rule === rule);
+          const fits = mine.filter((m) => m.fits);
+          const breaks = mine.filter((m) => !m.fits);
+          return `<div class="rule-card${mine.length ? "" : " empty"}">
+            <div class="rule-head"><span class="rule-end" lang="de">…${esc(rule.ending)}</span><span class="rule-share">${esc(rule.share)}</span></div>
+            ${fits.length ? `<p class="rule-words" lang="de">${wordsHTML(fits)}</p>` : ""}
+            ${breaks.length ? `<p class="rule-words breaks" lang="de"><b>Exceptions</b> ${wordsHTML(breaks)}</p>` : ""}
+          </div>`;
+        })
+        .join("")
+    );
+  }
+
+  $("ruleTips").innerHTML = columnsHTML((art) =>
+    ARTICLE_TIPS.filter((t) => t.article === art)
+      .map(
+        (t) => `<div class="rule-card">
+          <div class="rule-tip">${esc(t.tip)}</div>
+          <p class="rule-words" lang="de">${t.examples.map((e) => german(e)).join(", ")}</p>
+        </div>`
+      )
+      .join("")
+  );
+
+  // ---------- pages ----------
+  // Each link in .pages points to "#name"; elements with data-page="name ..." show only on those pages.
+  const pageLinks = [...document.querySelectorAll(".pages a")];
+  const PAGES = pageLinks.map((a) => a.hash.slice(1));
+
+  function showPage() {
+    const asked = location.hash.slice(1);
+    const page = PAGES.includes(asked) ? asked : PAGES.includes(settings.page) ? settings.page : PAGES[0];
+    // Put the page in the address without a new history entry, so Back leads to the previous page.
+    if (asked !== page) history.replaceState(null, "", "#" + page);
+    settings.page = page;
+    save();
+    document.querySelectorAll("[data-page]").forEach((el) => {
+      el.hidden = !el.dataset.page.split(" ").includes(page);
+    });
+    pageLinks.forEach((a) => {
+      if (a.hash === "#" + page) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+  }
+
+  window.addEventListener("hashchange", showPage);
 
   // ---------- language picker (page header and slideshow) ----------
   const langSelects = document.querySelectorAll(".lang-select");
@@ -562,6 +636,8 @@
 
   renderDays();
   renderList();
+  renderRules();
   renderPronouns();
   updateStart();
+  showPage();
 })();

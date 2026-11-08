@@ -55,3 +55,25 @@ const ARTICLE_RULES = [
   { ending: "tum", article: "das", share: "mostly" },
   { ending: "nis", article: "das", share: "mostly" },
 ];
+
+/*
+  Tips that depend on what a word means or how it is built, not on its ending.
+  The page can't check these from spelling, so they are only listed on the Articles page.
+
+  Each tip:  { article: "der", tip: "Male people", examples: ["der Mann", "der Vater"] }
+*/
+const ARTICLE_TIPS = [
+  { article: "der", tip: "Male people", examples: ["der Mann", "der Vater"] },
+  { article: "der", tip: "Days, months, seasons", examples: ["der Montag", "der Mai", "der Sommer"] },
+  { article: "der", tip: "Weather", examples: ["der Regen", "der Schnee", "der Wind"] },
+  { article: "der", tip: "Compass directions", examples: ["der Norden", "der Süden"] },
+
+  { article: "die", tip: "Female people", examples: ["die Frau", "die Mutter"] },
+  { article: "die", tip: "Numbers used as nouns", examples: ["die Eins", "die Zehn"] },
+
+  { article: "das", tip: "Verbs used as nouns (beats …en → der)", examples: ["das Essen", "das Schwimmen"] },
+  { article: "das", tip: "Starts with Ge… (usually)", examples: ["das Gebäude", "das Gemüse", "das Geschenk"] },
+  { article: "das", tip: "Young animals", examples: ["das Kind", "das Kalb", "das Lamm"] },
+  { article: "das", tip: "Metals", examples: ["das Gold", "das Silber", "das Eisen"] },
+  { article: "das", tip: "Colours used as nouns", examples: ["das Blau", "das Rot"] },
+];

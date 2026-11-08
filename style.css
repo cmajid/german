@@ -15,6 +15,10 @@
   --das: #1d7a42;
   --pl: #7d3fb8;
 
+  /* Nouns that break an article rule: amber, so it never reads as one of the article colours. */
+  --exception-bg: #f6e6bf;
+  --exception-line: #c9a35a;
+
   --font-ui: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
   --font-fa: "Vazirmatn", Tahoma, "Geeza Pro", sans-serif;
@@ -37,6 +41,9 @@
     --die: #ff8f7d;
     --das: #72d398;
     --pl: #c89eff;
+
+    --exception-bg: #352b17;
+    --exception-line: #8a6d33;
   }
 }
 
@@ -173,7 +180,7 @@ select:hover,
   color: var(--muted);
 }
 .rule .art { font-style: normal; }
-.rule.exception { border-style: dashed; border-color: var(--muted); }
+.rule.exception { background: var(--exception-bg); border-style: dashed; border-color: var(--exception-line); }
 .rule.exception b {
   margin-left: 2px;
   font-size: 0.85em;
@@ -182,6 +189,30 @@ select:hover,
   text-transform: uppercase;
   color: var(--text);
 }
+
+/* ---------- pages ---------- */
+/* Page links as large serif titles; the current one is underlined. Scrolls sideways if pages outgrow the width. */
+.pages {
+  display: flex;
+  gap: 28px;
+  padding-top: 18px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  box-shadow: inset 0 -1px var(--border);
+}
+.pages a {
+  flex: none;
+  padding: 4px 0 12px;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  line-height: 1.1;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s, border-color 0.15s;
+}
+.pages a:hover { color: var(--text); }
+.pages a[aria-current="page"] { color: var(--text); border-bottom-color: var(--text); }
 
 /* ---------- sections ---------- */
 .panel {
@@ -366,6 +397,62 @@ select:hover,
 @media (max-width: 600px) {
   .words td { padding: 10px 6px; }
   .words .note { display: none; }
+}
+
+/* ---------- articles page ---------- */
+.rules-page { padding-top: 36px; }
+.rules-intro { max-width: 62ch; margin: 0 0 24px; color: var(--muted); }
+.rules-sub {
+  margin: 56px 0 8px;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+/* der / die / das side by side; stacked on phones. */
+.rule-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 28px;
+  align-items: start;
+}
+@media (max-width: 600px) {
+  .rule-columns { grid-template-columns: 1fr; gap: 28px; }
+}
+.rule-col h3 {
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--text);
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.rule-card { padding: 12px 0; border-bottom: 1px solid var(--border); }
+.rule-card.empty { opacity: 0.5; } /* no words from the selected days yet */
+.rule-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.rule-end { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.2; }
+.rule-share { color: var(--muted); font-size: 0.85rem; text-align: right; }
+.rule-tip { font-weight: 500; }
+.rule-words { margin: 6px 0 0; font-size: 0.95rem; line-height: 1.7; }
+.rule-words .art { font-weight: 500; }
+.rule-words.breaks {
+  margin-top: 8px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--exception-bg);
+  color: var(--muted);
+}
+.rule-words.breaks b {
+  margin-right: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
 }
 
 /* ---------- slideshow ---------- */
