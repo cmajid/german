@@ -146,6 +146,43 @@ select:hover,
 .art-pl  { color: var(--pl); }
 .muted   { color: var(--muted); font-style: italic; }
 
+/* ---------- article rules (articles.js) ---------- */
+/* The ending a rule is about: underlined in the article's colour when the noun follows the rule,
+   a wavy line in the rule's colour when the noun is an exception. */
+.ending {
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+.ending.miss { text-decoration-style: wavy; text-decoration-thickness: 1.5px; }
+.miss-der { text-decoration-color: var(--der); }
+.miss-die { text-decoration-color: var(--die); }
+.miss-das { text-decoration-color: var(--das); }
+
+/* "…ung → die · 99%" label; dashed and marked "exception" when the noun breaks the rule. */
+.rule {
+  display: inline-block;
+  padding: 1px 9px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.rule .art { font-style: normal; }
+.rule.exception { border-style: dashed; border-color: var(--muted); }
+.rule.exception b {
+  margin-left: 2px;
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
 /* ---------- sections ---------- */
 .panel {
   padding: 28px 0;
@@ -322,6 +359,7 @@ select:hover,
 .card-table .src + .src { color: var(--muted); }
 .words .note { color: var(--muted); font-size: 0.88rem; }
 .words td:nth-last-child(2) { white-space: nowrap; } /* plural */
+.words .rule { display: table; margin-top: 5px; } /* own line, only as wide as its text */
 .words tr.sub td { border-top: none; padding-top: 3px; padding-bottom: 3px; }
 .words tr.sub:last-child td { padding-bottom: 11px; }
 
@@ -421,6 +459,9 @@ html.show-open body > :not(.show) { display: none; }
   color: var(--muted);
 }
 .card-note { color: var(--muted); font-size: 1.05rem; min-height: 1.5em; }
+.card-rule { margin-top: -6px; font-size: clamp(0.95rem, 2.6vw, 1.25rem); }
+.card-rule:empty { display: none; }
+.card-rule .rule { padding: 3px 14px; font-size: inherit; }
 
 /* Table slides (e.g. a verb with all its forms): smaller title so every row fits. */
 .card.is-table { gap: 10px; }

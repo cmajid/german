@@ -30,6 +30,7 @@
     autoNext: true,
     shuffle: true,
     speak: false,
+    showRules: true, // article rules from articles.js next to nouns
     voice: "", // voiceURI of the chosen German voice; empty = best available
     hiddenDays: [], // days the user unticked, so newly added days start ticked
   };
@@ -83,15 +84,45 @@
     return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   }
 
-  // "der Apfel" -> coloured article + noun
-  function german(text, isPlural) {
+  // ---------- article rules (articles.js) ----------
+  // Longest ending first, so "Mädchen" is checked against …chen before …en.
+  const RULES = [...ARTICLE_RULES].sort((a, b) => b.ending.length - a.ending.length);
+  const NOUN = /^(der|die|das)\s+([\p{L}-]+)$/iu;
+
+  // "die Zeitung" -> { rule: …ung → die, fits: true }. null when rules are off or none applies.
+  function ruleFor(w) {
+    if (!settings.showRules || w.plural === PLURAL_ONLY) return null;
+    const m = w.de.match(NOUN);
+    if (!m) return null;
+    const noun = m[2].toLowerCase();
+    // An ending must leave something before it: "das Ei" is not checked against …ei.
+    const rule = RULES.find((r) => noun.length > r.ending.length && noun.endsWith(r.ending));
+    return rule ? { rule, fits: rule.article === m[1].toLowerCase() } : null;
+  }
+
+  // Small label under the word: "…ung → die · 99%", or the same plus "exception".
+  function ruleHTML(match) {
+    if (!match) return "";
+    const { rule, fits } = match;
+    return `<span class="rule${fits ? "" : " exception"}">…${esc(rule.ending)} → <span class="art art-${rule.article}">${rule.article}</span> · ${esc(rule.share)}${fits ? "" : ` <b>exception</b>`}</span>`;
+  }
+
+  // "der Apfel" -> coloured article + noun. With a rule match, the noun's ending is marked too.
+  function german(text, isPlural, match) {
     const m = text.match(ARTICLE);
     if (!m) return esc(text);
     const cls = isPlural ? "art-pl" : "art-" + m[1].toLowerCase();
-    return `<span class="art ${cls}">${esc(m[1])}</span> ${esc(text.slice(m[0].length))}`;
+    const noun = text.slice(m[0].length);
+    let nounHTML = esc(noun);
+    if (match) {
+      const cut = noun.length - match.rule.ending.length;
+      const endCls = match.fits ? `fits ${cls}` : `miss miss-${match.rule.article}`;
+      nounHTML = `${esc(noun.slice(0, cut))}<span class="ending ${endCls}">${esc(noun.slice(cut))}</span>`;
+    }
+    return `<span class="art ${cls}">${esc(m[1])}</span> ${nounHTML}`;
   }
 
-  const wordHTML = (w) => german(w.de, w.plural === PLURAL_ONLY);
+  const wordHTML = (w) => german(w.de, w.plural === PLURAL_ONLY, ruleFor(w));
 
   const promptLangs = () => settings.lang.split(",").map((code) => LANGUAGES.find((l) => l.code === code));
 
@@ -175,12 +206,13 @@
     setDelay(Number.isFinite(v) ? v : DEFAULTS.delay);
   });
 
-  ["autoNext", "shuffle", "speak"].forEach((key) => {
+  ["autoNext", "shuffle", "speak", "showRules"].forEach((key) => {
     const input = $(key);
     input.checked = settings[key];
     input.addEventListener("change", () => {
       settings[key] = input.checked;
       save();
+      if (key === "showRules") renderList();
     });
   });
 
@@ -201,7 +233,7 @@
               .map(
                 (w) => `<tr>
                   ${translations(w, "td", "src")}
-                  <td>${wordHTML(w)}</td>
+                  <td>${wordHTML(w)}${ruleHTML(ruleFor(w))}</td>
                   <td>${pluralHTML(w)}</td>
                   <td class="note">${esc(w.note)}</td>
                 </tr>` +
@@ -374,9 +406,11 @@
     $("progressBar").style.width = `${((index + 1) / deck.length) * 100}%`;
     $("cardPrompt").innerHTML = translations(w, "div");
     $("cardDe").innerHTML = wordHTML(w);
+    $("cardRule").innerHTML = ruleHTML(ruleFor(w));
     $("cardPl").innerHTML = w.plural ? `<span class="label">Plural</span>${pluralHTML(w)}` : "";
     $("cardNote").textContent = w.note;
     $("cardDe").classList.toggle("shown", step >= 1);
+    $("cardRule").classList.toggle("shown", step >= 1);
     $("cardPl").classList.toggle("shown", step >= 2);
     $("cardNote").classList.toggle("shown", step >= lastStep(w));
     $("cardTable").querySelectorAll(".reveal").forEach((td, i) => td.classList.toggle("shown", step >= i + 2));
