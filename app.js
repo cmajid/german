@@ -30,8 +30,10 @@
     autoNext: true,
     shuffle: true,
     speak: false,
+    showRules: true, // article rules from articles.js next to nouns
     voice: "", // voiceURI of the chosen German voice; empty = best available
     hiddenDays: [], // days the user unticked, so newly added days start ticked
+    page: "words", // last page opened, used when the address has no #page
   };
 
   const $ = (id) => document.getElementById(id);
@@ -83,15 +85,48 @@
     return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   }
 
-  // "der Apfel" -> coloured article + noun
-  function german(text, isPlural) {
+  // ---------- article rules (articles.js) ----------
+  // Longest ending first, so "Mädchen" is checked against …chen before …en.
+  const RULES = [...ARTICLE_RULES].sort((a, b) => b.ending.length - a.ending.length);
+  const NOUN = /^(der|die|das)\s+([\p{L}-]+)$/iu;
+
+  // Labels next to words follow the "Show article rules" setting; the Articles page always matches.
+  const ruleFor = (w) => (settings.showRules ? matchRule(w) : null);
+
+  // "die Zeitung" -> { rule: …ung → die, fits: true }, or null when no rule applies.
+  function matchRule(w) {
+    if (w.plural === PLURAL_ONLY) return null;
+    const m = w.de.match(NOUN);
+    if (!m) return null;
+    const noun = m[2].toLowerCase();
+    // An ending must leave something before it: "das Ei" is not checked against …ei.
+    const rule = RULES.find((r) => noun.length > r.ending.length && noun.endsWith(r.ending));
+    return rule ? { rule, fits: rule.article === m[1].toLowerCase() } : null;
+  }
+
+  // Small label under the word: "…ung → die · 99%", or the same plus "exception".
+  function ruleHTML(match) {
+    if (!match) return "";
+    const { rule, fits } = match;
+    return `<span class="rule${fits ? "" : " exception"}">…${esc(rule.ending)} → <span class="art art-${rule.article}">${rule.article}</span> · ${esc(rule.share)}${fits ? "" : ` <b>exception</b>`}</span>`;
+  }
+
+  // "der Apfel" -> coloured article + noun. With a rule match, the noun's ending is marked too.
+  function german(text, isPlural, match) {
     const m = text.match(ARTICLE);
     if (!m) return esc(text);
     const cls = isPlural ? "art-pl" : "art-" + m[1].toLowerCase();
-    return `<span class="art ${cls}">${esc(m[1])}</span> ${esc(text.slice(m[0].length))}`;
+    const noun = text.slice(m[0].length);
+    let nounHTML = esc(noun);
+    if (match) {
+      const cut = noun.length - match.rule.ending.length;
+      const endCls = match.fits ? `fits ${cls}` : `miss miss-${match.rule.article}`;
+      nounHTML = `${esc(noun.slice(0, cut))}<span class="ending ${endCls}">${esc(noun.slice(cut))}</span>`;
+    }
+    return `<span class="art ${cls}">${esc(m[1])}</span> ${nounHTML}`;
   }
 
-  const wordHTML = (w) => german(w.de, w.plural === PLURAL_ONLY);
+  const wordHTML = (w) => german(w.de, w.plural === PLURAL_ONLY, ruleFor(w));
 
   const promptLangs = () => settings.lang.split(",").map((code) => LANGUAGES.find((l) => l.code === code));
 
@@ -136,6 +171,7 @@
     if (!e.target.checked) settings.hiddenDays.push(n);
     save();
     renderList();
+    renderRules();
     updateStart();
   });
 
@@ -148,6 +184,7 @@
       save();
       renderDays();
       renderList();
+      renderRules();
       updateStart();
     })
   );
@@ -175,12 +212,13 @@
     setDelay(Number.isFinite(v) ? v : DEFAULTS.delay);
   });
 
-  ["autoNext", "shuffle", "speak"].forEach((key) => {
+  ["autoNext", "shuffle", "speak", "showRules"].forEach((key) => {
     const input = $(key);
     input.checked = settings[key];
     input.addEventListener("change", () => {
       settings[key] = input.checked;
       save();
+      if (key === "showRules") renderList();
     });
   });
 
@@ -201,7 +239,7 @@
               .map(
                 (w) => `<tr>
                   ${translations(w, "td", "src")}
-                  <td>${wordHTML(w)}</td>
+                  <td>${wordHTML(w)}${ruleHTML(ruleFor(w))}</td>
                   <td>${pluralHTML(w)}</td>
                   <td class="note">${esc(w.note)}</td>
                 </tr>` +
@@ -222,6 +260,74 @@
       )
       .join("");
   }
+
+  // ---------- articles page ----------
+  const ARTICLES = ["der", "die", "das"];
+
+  const columnsHTML = (render) =>
+    ARTICLES.map(
+      (art) => `<div class="rule-col"><h3 class="art art-${art}">${art}</h3>${render(art)}</div>`
+    ).join("");
+
+  // Each ending rule with the nouns from the selected days that follow it or break it.
+  function renderRules() {
+    const seen = new Set(); // a noun listed on two days is shown once
+    const matches = selectedWords().flatMap((w) => {
+      const match = !seen.has(w.de) && matchRule(w);
+      seen.add(w.de);
+      return match ? [{ w, ...match }] : [];
+    });
+    const wordsHTML = (list) => list.map((m) => german(m.w.de, false, m)).join(", ");
+
+    $("ruleColumns").innerHTML = columnsHTML((art) =>
+      ARTICLE_RULES.filter((r) => r.article === art)
+        .map((rule) => {
+          const mine = matches.filter((m) => m.rule === rule);
+          const fits = mine.filter((m) => m.fits);
+          const breaks = mine.filter((m) => !m.fits);
+          return `<div class="rule-card${mine.length ? "" : " empty"}">
+            <div class="rule-head"><span class="rule-end" lang="de">…${esc(rule.ending)}</span><span class="rule-share">${esc(rule.share)}</span></div>
+            ${fits.length ? `<p class="rule-words" lang="de">${wordsHTML(fits)}</p>` : ""}
+            ${breaks.length ? `<p class="rule-words breaks" lang="de"><b>Exceptions</b> ${wordsHTML(breaks)}</p>` : ""}
+          </div>`;
+        })
+        .join("")
+    );
+  }
+
+  $("ruleTips").innerHTML = columnsHTML((art) =>
+    ARTICLE_TIPS.filter((t) => t.article === art)
+      .map(
+        (t) => `<div class="rule-card">
+          <div class="rule-tip">${esc(t.tip)}</div>
+          <p class="rule-words" lang="de">${t.examples.map((e) => german(e)).join(", ")}</p>
+        </div>`
+      )
+      .join("")
+  );
+
+  // ---------- pages ----------
+  // Each link in .pages points to "#name"; elements with data-page="name ..." show only on those pages.
+  const pageLinks = [...document.querySelectorAll(".pages a")];
+  const PAGES = pageLinks.map((a) => a.hash.slice(1));
+
+  function showPage() {
+    const asked = location.hash.slice(1);
+    const page = PAGES.includes(asked) ? asked : PAGES.includes(settings.page) ? settings.page : PAGES[0];
+    // Put the page in the address without a new history entry, so Back leads to the previous page.
+    if (asked !== page) history.replaceState(null, "", "#" + page);
+    settings.page = page;
+    save();
+    document.querySelectorAll("[data-page]").forEach((el) => {
+      el.hidden = !el.dataset.page.split(" ").includes(page);
+    });
+    pageLinks.forEach((a) => {
+      if (a.hash === "#" + page) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+  }
+
+  window.addEventListener("hashchange", showPage);
 
   // ---------- language picker (page header and slideshow) ----------
   const langSelects = document.querySelectorAll(".lang-select");
@@ -374,9 +480,11 @@
     $("progressBar").style.width = `${((index + 1) / deck.length) * 100}%`;
     $("cardPrompt").innerHTML = translations(w, "div");
     $("cardDe").innerHTML = wordHTML(w);
+    $("cardRule").innerHTML = ruleHTML(ruleFor(w));
     $("cardPl").innerHTML = w.plural ? `<span class="label">Plural</span>${pluralHTML(w)}` : "";
     $("cardNote").textContent = w.note;
     $("cardDe").classList.toggle("shown", step >= 1);
+    $("cardRule").classList.toggle("shown", step >= 1);
     $("cardPl").classList.toggle("shown", step >= 2);
     $("cardNote").classList.toggle("shown", step >= lastStep(w));
     $("cardTable").querySelectorAll(".reveal").forEach((td, i) => td.classList.toggle("shown", step >= i + 2));
@@ -528,6 +636,8 @@
 
   renderDays();
   renderList();
+  renderRules();
   renderPronouns();
   updateStart();
+  showPage();
 })();
