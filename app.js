@@ -108,7 +108,7 @@
   function ruleHTML(match) {
     if (!match) return "";
     const { rule, fits } = match;
-    return `<span class="rule${fits ? "" : " exception"}">…${esc(rule.ending)} → <span class="art art-${rule.article}">${rule.article}</span> · ${esc(rule.share)}${fits ? "" : ` <b>exception</b>`}</span>`;
+    return `<span class="rule tint-${rule.article}${fits ? "" : " exception"}">…${esc(rule.ending)} → <span class="art art-${rule.article}">${rule.article}</span> · ${esc(rule.share)}${fits ? "" : ` <b>exception</b>`}</span>`;
   }
 
   // "der Apfel" -> coloured article + noun. With a rule match, the noun's ending is marked too.
@@ -287,7 +287,7 @@
           const breaks = mine.filter((m) => !m.fits);
           return `<div class="rule-card${mine.length ? "" : " empty"}">
             <div class="rule-head"><span class="rule-end" lang="de">…${esc(rule.ending)}</span><span class="rule-share">${esc(rule.share)}</span></div>
-            ${fits.length ? `<p class="rule-words" lang="de">${wordsHTML(fits)}</p>` : ""}
+            ${fits.length ? `<p class="rule-words tint-${art}" lang="de">${wordsHTML(fits)}</p>` : ""}
             ${breaks.length ? `<p class="rule-words breaks" lang="de"><b>Exceptions</b> ${wordsHTML(breaks)}</p>` : ""}
           </div>`;
         })
@@ -300,7 +300,7 @@
       .map(
         (t) => `<div class="rule-card">
           <div class="rule-tip">${esc(t.tip)}</div>
-          <p class="rule-words" lang="de">${t.examples.map((e) => german(e)).join(", ")}</p>
+          <p class="rule-words tint-${art}" lang="de">${t.examples.map((e) => german(e)).join(", ")}</p>
         </div>`
       )
       .join("")

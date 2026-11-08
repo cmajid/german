@@ -18,6 +18,8 @@
   /* Nouns that break an article rule: amber, so it never reads as one of the article colours. */
   --exception-bg: #f6e6bf;
   --exception-line: #c9a35a;
+  /* Words that follow a rule: this much of their article's colour as background. */
+  --tint-amount: 11%;
 
   --font-ui: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
@@ -44,6 +46,7 @@
 
     --exception-bg: #352b17;
     --exception-line: #8a6d33;
+    --tint-amount: 16%;
   }
 }
 
@@ -166,12 +169,18 @@ select:hover,
 .miss-die { text-decoration-color: var(--die); }
 .miss-das { text-decoration-color: var(--das); }
 
+/* Rule backgrounds: a light tint of the rule's article colour (exceptions switch to amber). */
+.tint-der { --tint: var(--der); }
+.tint-die { --tint: var(--die); }
+.tint-das { --tint: var(--das); }
+
 /* "…ung → die · 99%" label; dashed and marked "exception" when the noun breaks the rule. */
 .rule {
   display: inline-block;
   padding: 1px 9px;
-  border: 1px solid var(--border);
+  border: 1px solid color-mix(in srgb, var(--tint, var(--border)) 30%, transparent);
   border-radius: 7px;
+  background: color-mix(in srgb, var(--tint, transparent) var(--tint-amount), transparent);
   font-family: var(--font-ui);
   font-size: 0.78rem;
   font-style: normal;
@@ -437,15 +446,16 @@ select:hover,
 .rule-end { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.2; }
 .rule-share { color: var(--muted); font-size: 0.85rem; text-align: right; }
 .rule-tip { font-weight: 500; }
-.rule-words { margin: 6px 0 0; font-size: 0.95rem; line-height: 1.7; }
-.rule-words .art { font-weight: 500; }
-.rule-words.breaks {
-  margin-top: 8px;
+.rule-words {
+  margin: 8px 0 0;
   padding: 4px 10px;
   border-radius: 8px;
-  background: var(--exception-bg);
-  color: var(--muted);
+  background: color-mix(in srgb, var(--tint, transparent) var(--tint-amount), transparent);
+  font-size: 0.95rem;
+  line-height: 1.7;
 }
+.rule-words .art { font-weight: 500; }
+.rule-words.breaks { background: var(--exception-bg); color: var(--muted); }
 .rule-words.breaks b {
   margin-right: 4px;
   font-size: 0.7rem;
